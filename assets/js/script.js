@@ -6,7 +6,7 @@ citySearchHistoryDivEl = $('#citySearchHistory');
 
 var searchHistory = [];
 
-function lookupWeather(event) {
+function handleCitySearchForm(event) {
   event.preventDefault();
 
   var inputCity = searchInputEl.val();
@@ -15,6 +15,7 @@ function lookupWeather(event) {
   if (addCityToSearchHistory(inputCity) == true) {
     displaySearchHistory(inputCity);
   }
+  getForecast(inputCity);
 }
 
 function addCityToSearchHistory(inputCity) {
@@ -52,9 +53,58 @@ function displaySearchHistory(inputCity) {
   searchHistoryEl.append(liEl);
   citySearchHistoryDivEl.append(searchHistoryEl);
 }
+function getCityCoordinates(searchCity){
+  /* get latitude and longitude for the input city */
+  //api.openweathermap.org/data/2.5/forecast?q={city name}&appid={API key}
+  var requestUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + searchCity + "&appid=" + "a8f97ddc7ad9ecf69e905ace742d4325";
 
-function getForecast(event) {
-  console.log("getForecast for: " + event.target);
+  fetch(requestUrl)
+  .then (function(response) {
+    console.log("Received response to get coords request");
+    response.json().then(function(data) {
+      /* get the latitude, longitude */
+      console.log(data);
+      console.log("latitude " + data.city.coord.lat + ", longitude: " + data.city.coord.lon);
+      getCurrentConditions(data.city.coord.lat, data.city.coord.lon);
+    });
+  });
 }
 
-formEl.on('submit', lookupWeather);
+function getCurrentConditions(latitude, longitude) {
+  console.log("input City Coordinates : " + latitude, longitude);
+
+  //api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}
+  var requestUrl = "https://api.openweathermap.org/data/2.5/forecast?lat=" + latitude + "&lon=" + longitude + "&appid=" + "a8f97ddc7ad9ecf69e905ace742d4325";
+  fetch(requestUrl)
+  .then (function(response){
+    console.log("Received response to get current weather conditions");
+    response.json().then (function(data){
+      console.log("Current Conditions: ");
+      console.log(data);
+      // display the current conditions
+    });
+  });
+}
+
+function getForecast(searchCity) {
+
+  /* form search request for the city */
+  /* get latitude and longitude for the input city */
+  getCityCoordinates(searchCity);
+
+  /* get current forecast / 5 day forecast */
+  /* handle response */
+  /* display current weather conditions */
+  /* display future weather conditions */
+
+}
+
+function handleCityFromHistory(event) {
+  console.log("getForecast for: " + $(event.target));
+  var searchCity = $(event.target).text();
+  console.log("searchCity = " + searchCity);
+  getForecast(searchCity);
+}
+
+formEl.on('submit', handleCitySearchForm);
+searchHistoryEl.on('click', handleCityFromHistory);

@@ -1,0 +1,32 @@
+* {
+  /* border: 1px solid black;*/
+  /* margin: 5px; */
+}
+header {
+  background-color: rgb(34, 88, 226);
+  text-align: center;
+  color: whitesmoke;
+  padding: 2%;
+}
+
+#searchCityBtn {
+  margin-top: 5px;
+}
+hr {
+  border: 3px solid black;
+  border-style:double;
+}
+#cityWeatherToday {
+    border: 1px solid black;
+    margin: 5px;
+}
+
+ul {
+  list-style: none;
+  margin: 5px;
+}
+
+.dayForecast {
+  border: 1px solid black;
+  margin: 5px;
+}

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="./assets/css/style.css" />
+        <title>Weather</title>
+    </head>
+    <body>
+        <header>
+            <h1>Weather Dashboard</h1>
+        </header>
+        <main>
+            <div class="container row">
+            <div id="citySearch" class="container col-2 col-sm-2 col-md-2 col-lg-2">
+                <form id="citySearchForm" class="form-group">
+                    <div>
+                        <label style="font-weight: bolder;">Search for a city:</label>
+                        <input class="form-control" name="inputCity" type="search" placeholder="Enter the city">
+                    </div>
+                    <button id="searchCityBtn" type="submit" class="btn btn-primary">Search</button>
+                </form>
+                <hr />
+                <div id="citySearchHistory"></div>
+            </div>
+            <div class="container col-10 col-sm-10 col-md-10 col-lg-10">
+                <div id="cityWeatherToday">
+                    <h3><span id="selectedCity"> </span><span id="dateToday"></span></h3>
+                    <h4>Temp: <span id="tempToday"></span></h4>
+                    <h4>Wind: <span id="WindToday"></span></h4>
+                    <h4>Humidity: <span id="humidityToday"></span></h4>
+                </div>
+                <!-- <div class="container row" id="cityFiveDayForecast"> -->
+                    <ul class="container row" id="fiveDayForecast">
+                        <li class="col dayForecast" id="dayOneForecast">
+                            <h5><span id="dayOneDate"></span></h5>
+                            <img src="" />
+                            <h6>Temp: <span id="temp"></span></h6>
+                            <h6>Wind: <span id="wind"></span></h6>
+                            <h6>Humidity: <span id="humidity"></span></h6>
+                        </li>
+                        <li class="col dayForecast" id="dayTwoForecast">
+                            <h5><span id="dayOneDate"></span></h5>
+                            <img src="" />
+                            <h6>Temp: <span id="temp"></span></h6>
+                            <h6>Wind: <span id="wind"></span></h6>
+                            <h6>Humidity: <span id="humidity"></span></h6>
+                        </li>
+                        <li class="col dayForecast" id="dayThreeForecast">
+                            <h5><span id="dayOneDate"></span></h5>
+                            <img src="" />
+                            <h6>Temp: <span id="temp"></span></h6>
+                            <h6>Wind: <span id="wind"></span></h6>
+                            <h6>Humidity: <span id="humidity"></span></h6>
+                        </li>
+                        <li class="col dayForecast" id="dayFourForecast">
+                            <h5><span id="dayOneDate"></span></h5>
+                            <img src="" />
+                            <h6>Temp: <span id="temp"></span></h6>
+                            <h6>Wind: <span id="wind"></span></h6>
+                            <h6>Humidity: <span id="humidity"></span></h6>
+                        </li>
+                        <li class="col dayForecast" id="dayFiveForecast">
+                            <h5><span id="dayOneDate"></span></h5>
+                            <img src="" />
+                            <h6>Temp: <span id="temp"></span></h6>
+                            <h6>Wind: <span id="wind"></span></h6>
+                            <h6>Humidity: <span id="humidity"></span></h6>
+                        </li>
+                    </ul>
+                <!-- </div> -->
+            </div>
+            </div>
+        </main>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="./assets/js/script.js"></script>
+    </body>
+</html>

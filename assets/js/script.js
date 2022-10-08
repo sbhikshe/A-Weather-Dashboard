@@ -1,7 +1,7 @@
 formEl = $('#citySearchForm');
 searchInputEl = $('input[name="inputCity"]');
 searchBtnEl = document.querySelector("#searchCityBtn");
-searchHistoryEl =$('<ul>');
+searchHistoryUlEl =$('<ul>');
 citySearchHistoryDivEl = $('#citySearchHistory');
 
 var searchHistory = [];
@@ -12,10 +12,12 @@ function handleCitySearchForm(event) {
   var inputCity = searchInputEl.val();
   console.log("Input city: " + inputCity);
 
-  if (addCityToSearchHistory(inputCity) == true) {
-    displaySearchHistory(inputCity);
+  if(inputCity != ""){
+    if (addCityToSearchHistory(inputCity) == true) {
+      displaySearchHistory();
+    }
+    getForecast(inputCity);
   }
-  getForecast(inputCity);
 }
 
 function addCityToSearchHistory(inputCity) {
@@ -41,18 +43,49 @@ function addCityToSearchHistory(inputCity) {
   }
   return true;
 }
-function displaySearchHistory(inputCity) {
-  var liEl = $('<li>');
-  var cityBtnEl = $('<button>');
+function displaySearchHistory() {
+  var liEl;
+  var cityBtnEl;
+  var searchHistoryUlEl;
 
-  cityBtnEl.text(inputCity);
-  cityBtnEl.addClass("btn btn-primary");
-  liEl.append(cityBtnEl);
+  console.log("in displaySearchHistory()");
 
-  liEl.on('click', getForecast);
-  searchHistoryEl.append(liEl);
-  citySearchHistoryDivEl.append(searchHistoryEl);
+  /* get search history from local storage */
+  var tmp = JSON.parse(localStorage.getItem("searchHistory"));
+  /* if there is one, then show the cities, else return right away */
+  if (tmp) {
+    /* not empty, iterate through it and show the cities */
+    console.log("Search history exists in local storage");
+    searchHistory = tmp;
+    searchHistoryUlEl =$('<ul>');
+
+    for (var i = 0; i < searchHistory.length; i++){
+      /* set up the button with the city name */
+      /* add it to the li element */
+      console.log("City " + i + ": " + searchHistory[i]);
+      liEl = $('<li>');
+      cityBtnEl = $('<button>');
+      cityBtnEl.text(searchHistory[i]);
+      cityBtnEl.addClass("btn btn-primary");
+      liEl.append(cityBtnEl);
+  
+      //liEl.on('click', getForecast); - required? there is a listener on the ul?
+      /* attach the list item to the list */
+      searchHistoryUlEl.append(liEl);
+    }
+    /* if there is already an ul attached to the div, remove that
+    before adding this new ul */
+    /* attach the list to the city search history div */
+    if(citySearchHistoryDivEl.children($('ul'))){
+      console.log("Removing existing ul and attaching new one")
+      citySearchHistoryDivEl.empty();
+    }
+    citySearchHistoryDivEl.append(searchHistoryUlEl);
+  } else {
+    console.log("No search history");
+  }
 }
+
 function getCityCoordinates(searchCity){
   /* get latitude and longitude for the input city */
   //api.openweathermap.org/data/2.5/forecast?q={city name}&appid={API key}
@@ -106,5 +139,12 @@ function handleCityFromHistory(event) {
   getForecast(searchCity);
 }
 
+function showDashboard() {
+  /* the form for city search is already displayed */
+  /* we want to pull the cities from the stored  search history (if any) and show that now */
+  displaySearchHistory();
+}
+
+$('document').ready(showDashboard);
 formEl.on('submit', handleCitySearchForm);
-searchHistoryEl.on('click', handleCityFromHistory);
+citySearchHistoryDivEl.on('click', handleCityFromHistory);

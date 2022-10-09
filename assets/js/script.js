@@ -1,8 +1,13 @@
+/* inside col-2 container */
 formEl = $('#citySearchForm');
 searchInputEl = $('input[name="inputCity"]');
 searchBtnEl = document.querySelector("#searchCityBtn");
 searchHistoryUlEl =$('<ul>');
 citySearchHistoryDivEl = $('#citySearchHistory');
+
+/* inside col-10 container */
+var cityWeatherTodayEl = $('#cityWeatherToday'); // div
+var fiveDayForecastUlEl = $('#fiveDayForecast'); // ul
 
 var searchHistory = [];
 
@@ -107,7 +112,9 @@ function getCurrentConditions(latitude, longitude) {
   console.log("input City Coordinates : " + latitude, longitude);
 
   //api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}
-  var requestUrl = "https://api.openweathermap.org/data/2.5/forecast?lat=" + latitude + "&lon=" + longitude + "&appid=" + "a8f97ddc7ad9ecf69e905ace742d4325";
+  var requestUrl = "https://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longitude + "&appid=" + "a8f97ddc7ad9ecf69e905ace742d4325";
+
+  //var requestUrl = "https://api.openweathermap.org/data/2.5/forecast?lat=" + latitude + "&lon=" + longitude + "&appid=" + "a8f97ddc7ad9ecf69e905ace742d4325";
   fetch(requestUrl)
   .then (function(response){
     console.log("Received response to get current weather conditions");
@@ -115,8 +122,67 @@ function getCurrentConditions(latitude, longitude) {
       console.log("Current Conditions: ");
       console.log(data);
       // display the current conditions
+      displayCurrentWeather(data);
+      //console.log("Response city name: " + data.name);
     });
   });
+}
+
+function displayCurrentWeather(data) {
+  console.log("displayCurrentWeather");
+  var cityName = data.name;
+  var momentObj = moment.unix(data.dt);
+  console.log("city = " + cityName + " date = " + momentObj.format("D MMM YYYY"));
+  console.log("temp: " + data.main.temp);
+  console.log("wind: " + data.wind.speed);
+  console.log("humidity: " + data.main.humidity + "%");
+
+  var selectedCityEl;
+  var iconEl;
+  var temperatureEl;
+  var windEl;
+  var humidityEl;
+ 
+  /* if the elements already exist, just need to set them */
+  /* else create and add to the div */
+  var divEl = cityWeatherTodayEl.children();
+  if (divEl.length > 0) {
+    selectedCityEl = divEl.eq(0);
+    iconEl = selectedCityEl.children().eq(0);
+    temperatureEl = divEl.eq(2);
+    windEl = divEl.eq(3);
+    humidityEl = divEl.eq(4);
+  } else {
+    selectedCityEl = $('<h3>');
+    cityWeatherTodayEl.append(selectedCityEl);
+
+    iconEl = $('<img>');
+    selectedCityEl.append(iconEl);
+
+    dateEl = $('<h3>');
+    cityWeatherTodayEl.append(dateEl);
+
+    temperatureEl = $('<h5>');
+    cityWeatherTodayEl.append(temperatureEl);
+
+    windEl = $('<h5>');
+    cityWeatherTodayEl.append(windEl);
+
+    humidityEl = $('<h5>');
+    cityWeatherTodayEl.append(humidityEl);
+  }
+
+  /* set the city name, date, temp, wind, humidity values */
+  selectedCityEl.text(data.name + " (" + momentObj.format("MMM D, YYYY") + ")");
+  var iconId = data.weather[0].icon;
+  iconEl.attr("src", "http://openweathermap.org/img/w/" + iconId + ".png");
+  selectedCityEl.append(iconEl);
+
+  var fahr = ((Number(data.main.temp) - 273.15) * 1.8 + 32).toFixed(0);
+  temperatureEl.text("Temperature: " + fahr + " " + '\u00b0' + "F");
+  windEl.text("Wind speed: " + data.wind.speed + " mph");
+  humidityEl.text("Humidity: " + data.main.humidity + "%");
+
 }
 
 function getForecast(searchCity) {

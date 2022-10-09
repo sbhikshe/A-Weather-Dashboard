@@ -1,5 +1,5 @@
 * {
-  /* border: 1px solid black;*/
+   /*border: 1px solid black;*/
   /* margin: 5px; */
 }
 header {
@@ -9,9 +9,6 @@ header {
   padding: 2%;
 }
 
-#searchCityBtn {
-  margin-top: 5px;
-}
 hr {
   border: 3px solid black;
   border-style:double;
@@ -19,6 +16,8 @@ hr {
 #cityWeatherToday {
     border: 1px solid black;
     margin: 5px;
+    padding: 5px;
+    visibility: hidden;
 }
 
 ul {

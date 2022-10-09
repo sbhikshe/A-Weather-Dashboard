@@ -14,30 +14,21 @@
         </header>
         <main>
             <div class="container row">
-            <div id="citySearch" class="container col-2 col-sm-2 col-md-2 col-lg-2">
-                <form id="citySearchForm" class="form-group">
-                    <div>
-                        <label style="font-weight: bolder;">Search for a city:</label>
-                        <input class="form-control" name="inputCity" type="search" placeholder="Enter the city">
-                    </div>
-                    <button id="searchCityBtn" type="submit" class="btn btn-primary">Search</button>
+            <div id="citySearch" class="container col-12 col-sm-3 col-md-3 col-lg-3">
+                <!-- <form id="citySearchForm" class="form-group container col-12 col-sm-12 col-md-12 col-lg-12" > -->
+                <form id="citySearchForm" class="form-group container col-12 col-sm-12 col-md-12 col-lg-12" >
+                    <label style="font-weight: bolder;">Search for a city:</label>
+                    <input class="form-control" name="inputCity" type="search" placeholder="Enter the city">
+                    <button id="searchCityBtn" type="submit" class="btn btn-primary btn-block mt-3">Search</button>
                 </form>
                 <hr />
-                <div id="citySearchHistory"></div>
+                <ul id="citySearchHistory" class="container col-12 col-sm-12 col-md-12 col-lg-12"></ul>
+                <!-- <ul id="citySearchHistory" class="container col-12 col-sm-12 col-md-12 col-lg-12"></ul> -->
             </div>
-            <div class="container col-10 col-sm-10 col-md-10 col-lg-10">
-                <div id="cityWeatherToday">
+            <div class="container col-12 col-sm-9 col-md-9 col-lg-9">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12" id="cityWeatherToday">
                 </div>
-                <ul class="container row" id="fiveDayForecast">
-                    <!--
-                    <li class="col dayForecast" id="dayOneForecast">
-                        <h5><span id="dayOneDate"></span></h5>
-                        <img src="" />
-                        <h6>Temp: <span id="temp"></span></h6>
-                        <h6>Wind: <span id="wind"></span></h6>
-                        <h6>Humidity: <span id="humidity"></span></h6>
-                    </li>
-                    -->
+                <ul class="container row col-12 col-sm-12 col-md-12 col-lg-12" id="fiveDayForecast">
                 </ul>
             </div>
             </div>

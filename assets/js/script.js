@@ -122,7 +122,7 @@ function displaySearchHistory() {
       liEl = $('<li>');
       cityBtnEl = $('<button>');
       cityBtnEl.text(searchHistory[i]);
-      cityBtnEl.addClass("btn btn-primary btn-block mt-3");
+      cityBtnEl.addClass("btn btn-primary btn-block mt-3 bg-secondary");
       liEl.append(cityBtnEl);
   
       /* attach the list item to the list */
@@ -228,7 +228,7 @@ function displayFiveDayForecast(data) {
   if (daysLiEl.length === 0) {
     for ( var i = 0; i < 5; i++) {
       fiveDayForecastObj[i].dayLiEl = $('<li>');
-      fiveDayForecastObj[i].dayLiEl.addClass("dayForecast col-2 col-sm2- col-md-2 col-lg-2");
+      fiveDayForecastObj[i].dayLiEl.addClass("dayForecast col-2 col-sm2- col-md-2 col-lg-2 pt-2");
 
       fiveDayForecastObj[i].dateEl = $('<h5>');
       fiveDayForecastObj[i].dayLiEl.append(fiveDayForecastObj[i].dateEl);

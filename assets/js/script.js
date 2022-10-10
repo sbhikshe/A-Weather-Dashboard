@@ -69,12 +69,25 @@ function handleCitySearchForm(event) {
   event.preventDefault();
 
   var inputCity = searchInputEl.val();
+  
   if(inputCity != ""){
     if (addCityToSearchHistory(inputCity) == true) {
       displaySearchHistory();
     }
     getForecast(inputCity);
   }
+  
+ /*
+  if(inputCity != ""){
+    if (getForecast(inputCity)) {
+      if (addCityToSearchHistory(inputCity) == true) {
+        displaySearchHistory();
+      }
+    } else {
+      console.log("Not able to get the forecast");
+    }
+  }
+  */
 }
 
 function addCityToSearchHistory(inputCity) {
@@ -140,15 +153,23 @@ function getForecast(searchCity){
 
   fetch(requestUrl)
   .then (function(response) {
-    console.log("Received response to get coords request");
-    response.json().then(function(data) {
-      /* get the latitude, longitude */
-      console.log(data);
-      console.log("latitude " + data.city.coord.lat + ", longitude: " + data.city.coord.lon);
-      getCurrentConditions(data.city.coord.lat, data.city.coord.lon);
-      getFiveDayForecast(data.city.coord.lat, data.city.coord.lon);
-    });
+      console.log("Received response to get coords request: " + response.statusText);
+      if(response.ok) {
+        response.json().then(function(data) {
+          /* get the latitude, longitude */
+          console.log(data);
+          console.log("latitude " + data.city.coord.lat + ", longitude: " + data.city.coord.lon);
+          getCurrentConditions(data.city.coord.lat, data.city.coord.lon);
+          getFiveDayForecast(data.city.coord.lat, data.city.coord.lon);
+        })
+      } else {
+        alert("City: " + searchCity + " " + response.statusText);
+      }
+    })
+  .catch ( function(error) {
+    alert ("Unable to connect");
   });
+
 }
 
 function getCurrentConditions(latitude, longitude) {

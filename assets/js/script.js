@@ -69,25 +69,11 @@ function handleCitySearchForm(event) {
   event.preventDefault();
 
   var inputCity = searchInputEl.val();
-  
   if(inputCity != ""){
-    if (addCityToSearchHistory(inputCity) == true) {
-      displaySearchHistory();
-    }
     getForecast(inputCity);
+  } else {
+    console.log("Input city is empty");
   }
-  
- /*
-  if(inputCity != ""){
-    if (getForecast(inputCity)) {
-      if (addCityToSearchHistory(inputCity) == true) {
-        displaySearchHistory();
-      }
-    } else {
-      console.log("Not able to get the forecast");
-    }
-  }
-  */
 }
 
 function addCityToSearchHistory(inputCity) {
@@ -161,6 +147,9 @@ function getForecast(searchCity){
           console.log("latitude " + data.city.coord.lat + ", longitude: " + data.city.coord.lon);
           getCurrentConditions(data.city.coord.lat, data.city.coord.lon);
           getFiveDayForecast(data.city.coord.lat, data.city.coord.lon);
+          if (addCityToSearchHistory(searchCity) == true) {
+            displaySearchHistory();
+          }
         })
       } else {
         alert("City: " + searchCity + " " + response.statusText);

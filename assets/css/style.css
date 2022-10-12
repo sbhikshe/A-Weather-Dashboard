@@ -1,6 +1,4 @@
-* {
-  /*border: 1px solid black;*/
-}
+
 header {
   background: linear-gradient(to right, rgb(28, 28, 224),rgb(8, 8, 91));
   text-align: center;
@@ -9,7 +7,7 @@ header {
 }
 
 hr {
-  border: 3px solid black;
+  border: 2px solid black;
   border-style:double;
 }
 

@@ -1,4 +1,4 @@
-/* inside col-2 container */
+/* The city search form and history below */
 formEl = $('#citySearchForm');
 searchInputEl = $('input[name="inputCity"]');
 searchBtnEl = document.querySelector("#searchCityBtn");
@@ -21,7 +21,7 @@ var currentDayObj = {
 
 /* 5 day forecast - DOM elements */
 /* Build this the first time, and maintain the references so
-    we don't need to traverse the DOM everytime */
+  we don't need to traverse the DOM everytime */
 var day0 = {
   dayLiEl: undefined,
   dateEl: undefined,
@@ -65,6 +65,16 @@ var day4 = {
 };
 var fiveDayForecastObj = [day0, day1, day2, day3, day4];
 
+/* This function is invoked when the document is loaded and ready */
+/* The form for city search is already displayed */
+/* Pull the cities from the stored search history (if any) and show them now */
+function showDashboard() {
+  displaySearchHistory();
+}
+
+/* This function is invoked when the user enters a city to search for
+  the weather, and clicks on the Search button. If the city is invalid,
+  an alert box pops up. Else we proceed to get the forecast */
 function handleCitySearchForm(event) {
   event.preventDefault();
 
@@ -76,61 +86,15 @@ function handleCitySearchForm(event) {
   }
 }
 
-function addCityToSearchHistory(inputCity) {
-
-  var tmp = JSON.parse(localStorage.getItem("searchHistory"));
-  if(!tmp) {
-      searchHistory.push(inputCity);
-      localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
-  } else {
-    searchHistory = tmp;
-    var found = false;
-    for (var i = 0; i < searchHistory.length; i++) {
-      if(searchHistory[i] == inputCity) {
-        return false;
-      }
-    }
-    if(!found) {
-      searchHistory.push(inputCity);
-      localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
-    }
-  }
-  return true;
+/* This function is invoked when the user clicks on a city in
+  the search history. We retrieve the forecast for the city. */
+function handleCityFromHistory(event) {
+  console.log("getForecast for: " + $(event.target));
+  var searchCity = $(event.target).text();
+  console.log("searchCity = " + searchCity);
+  getForecast(searchCity);
 }
-function displaySearchHistory() {
-  var liEl;
-  var cityBtnEl;
 
-  /* get search history from local storage */
-  var tmp = JSON.parse(localStorage.getItem("searchHistory"));
-  /* if there is one, then show the cities, else return right away */
-  if (tmp) {
-    /* not empty, iterate through it and show the cities */
-    searchHistory = tmp;
-
-    /* if there are li attached to the ul, remove them? */
-    /* there won't be any li when the page refreshes, but there are 
-      items in the search history in local storage */
-    if(citySearchHistoryUlEl.children($('li'))){
-      citySearchHistoryUlEl.empty();
-    }
-
-    for (var i = 0; i < searchHistory.length; i++){
-      /* set up the button with the city name */
-      /* add it to the li element */
-      liEl = $('<li>');
-      cityBtnEl = $('<button>');
-      cityBtnEl.text(searchHistory[i]);
-      cityBtnEl.addClass("btn btn-primary btn-block mt-3 bg-secondary");
-      liEl.append(cityBtnEl);
-  
-      /* attach the list item to the list */
-      citySearchHistoryUlEl.append(liEl);
-    }
-  } else {
-    console.log("No search history");
-  }
-}
 
 function getForecast(searchCity){
   /* get latitude and longitude for the input city */
@@ -143,7 +107,6 @@ function getForecast(searchCity){
       if(response.ok) {
         response.json().then(function(data) {
           /* get the latitude, longitude */
-          console.log(data);
           console.log("latitude " + data.city.coord.lat + ", longitude: " + data.city.coord.lon);
           getCurrentConditions(data.city.coord.lat, data.city.coord.lon);
           getFiveDayForecast(data.city.coord.lat, data.city.coord.lon);
@@ -166,9 +129,7 @@ function getCurrentConditions(latitude, longitude) {
   var requestUrl = "https://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longitude + "&appid=" + "a8f97ddc7ad9ecf69e905ace742d4325";
   fetch(requestUrl)
   .then (function(response){
-    //console.log("Received response to get current weather conditions");
     response.json().then (function(data){
-      //console.log(data);
       displayCurrentWeather(data);
     });
   });
@@ -222,9 +183,7 @@ function getFiveDayForecast(latitude, longitude) {
   var requestUrl = "https://api.openweathermap.org/data/2.5/forecast?lat=" + latitude + "&lon=" + longitude + "&appid=" + "a8f97ddc7ad9ecf69e905ace742d4325";
   fetch(requestUrl)
   .then (function(response){
-    //console.log("Received response to get 5 day forecast weather");
     response.json().then (function(data){
-      //console.log(data);
       displayFiveDayForecast(data);
     });
   });
@@ -288,17 +247,61 @@ function displayFiveDayForecast(data) {
   }
 }
 
-function handleCityFromHistory(event) {
-  console.log("getForecast for: " + $(event.target));
-  var searchCity = $(event.target).text();
-  console.log("searchCity = " + searchCity);
-  getForecast(searchCity);
+function addCityToSearchHistory(inputCity) {
+
+  var tmp = JSON.parse(localStorage.getItem("searchHistory"));
+  if(!tmp) {
+      searchHistory.push(inputCity);
+      localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+  } else {
+    searchHistory = tmp;
+    var found = false;
+    for (var i = 0; i < searchHistory.length; i++) {
+      if(searchHistory[i] == inputCity) {
+        return false;
+      }
+    }
+    if(!found) {
+      searchHistory.push(inputCity);
+      localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+    }
+  }
+  return true;
 }
 
-function showDashboard() {
-  /* the form for city search is already displayed */
-  /* Pull the cities from the stored search history (if any) and show them now */
-  displaySearchHistory();
+function displaySearchHistory() {
+  var liEl;
+  var cityBtnEl;
+
+  /* get search history from local storage */
+  var tmp = JSON.parse(localStorage.getItem("searchHistory"));
+  /* if there is one, then show the cities, else return right away */
+  if (tmp) {
+    /* not empty, iterate through it and show the cities */
+    searchHistory = tmp;
+
+    /* if there are li attached to the ul, remove them? */
+    /* there won't be any li when the page refreshes, but there are 
+      items in the search history in local storage */
+    if(citySearchHistoryUlEl.children($('li'))){
+      citySearchHistoryUlEl.empty();
+    }
+
+    for (var i = 0; i < searchHistory.length; i++){
+      /* set up the button with the city name */
+      /* add it to the li element */
+      liEl = $('<li>');
+      cityBtnEl = $('<button>');
+      cityBtnEl.text(searchHistory[i]);
+      cityBtnEl.addClass("btn btn-primary btn-block mt-3 bg-secondary");
+      liEl.append(cityBtnEl);
+  
+      /* attach the list item to the list */
+      citySearchHistoryUlEl.append(liEl);
+    }
+  } else {
+    console.log("No search history");
+  }
 }
 
 $('document').ready(showDashboard);
